@@ -45,29 +45,22 @@ namespace ClientDependency.Core.Module
         {
             var app = (HttpApplication)sender;
             var http = new HttpContextWrapper(app.Context);
-
-            //if debug is on, then don't compress
-            if (!http.IsDebuggingEnabled)
-            {
-                //IMPORTANT: Compression must be assigned before any other filters are executed!
-                // if compression is applied after the response has been modified then we will end
-                // up getting encoding errors.
-                // The compressor will not attempt to compress if the current filter is not ASP.Net's 
-                // original filter. The filter could be changed by developers or perhaps even hosting
-                // providers (based on their machine.config with their own modules.
-                var c = new MimeTypeCompressor(new HttpContextWrapper(app.Context));
-                c.AddCompression();
-            }
-
+            
+            //IMPORTANT: Compression must be assigned before any other filters are executed!
+            // if compression is applied after the response has been modified then we will end
+            // up getting encoding errors.
+            // The compressor will not attempt to compress if the current filter is not ASP.Net's 
+            // original filter. The filter could be changed by developers or perhaps even hosting
+            // providers (based on their machine.config with their own modules.
+            var c = new MimeTypeCompressor(new HttpContextWrapper(app.Context));
+            c.AddCompression();
+            
             var filters = LoadFilters(http);
 
             if (ValidateCurrentHandler(filters))
             {
                 ExecuteFilter(http, filters);
             }
-
-            var c = new MimeTypeCompressor(new HttpContextWrapper(app.Context));
-            c.AddCompression();
         }
 
         #endregion
