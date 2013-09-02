@@ -21,10 +21,6 @@ namespace ClientDependency.Core.Mvc
         /// <returns></returns>
         public override bool ValidateCurrentHandler()
         {
-            //don't filter if we're in debug mode
-            if (CurrentContext.IsDebuggingEnabled)
-                return false;
-
             IHttpHandler handler = CurrentContext.CurrentHandler as MvcHandler;
             if (handler != null)
             {

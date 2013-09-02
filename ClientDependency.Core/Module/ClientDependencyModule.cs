@@ -53,12 +53,8 @@ namespace ClientDependency.Core.Module
                 ExecuteFilter(http, filters);
             }
 
-            //if debug is on, then don't compress
-            if (!http.IsDebuggingEnabled)
-            {
-                var c = new MimeTypeCompressor(new HttpContextWrapper(app.Context));
-                c.AddCompression();
-            }
+            var c = new MimeTypeCompressor(new HttpContextWrapper(app.Context));
+            c.AddCompression();
         }
 
         #endregion

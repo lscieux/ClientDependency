@@ -32,7 +32,7 @@ namespace ClientDependency.Core.FileRegistration.Providers
 
             var sb = new StringBuilder();
 
-            if (http.IsDebuggingEnabled || !EnableCompositeFiles)
+            if (!EnableCompositeFiles)
 			{
 				foreach (var dependency in jsDependencies)
 				{
@@ -66,7 +66,7 @@ namespace ClientDependency.Core.FileRegistration.Providers
 
             var sb = new StringBuilder();
 
-            if (http.IsDebuggingEnabled || !EnableCompositeFiles)
+            if (!EnableCompositeFiles)
 			{
 				foreach (var dependency in cssDependencies)
 				{

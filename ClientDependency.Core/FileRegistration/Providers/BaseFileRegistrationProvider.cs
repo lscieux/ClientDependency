@@ -223,7 +223,7 @@ namespace ClientDependency.Core.FileRegistration.Providers
                 }
 
                 //append query strings to each file if we are in debug mode
-                if (http.IsDebuggingEnabled || !EnableCompositeFiles)
+                if (!EnableCompositeFiles)
                 {
                     dependency.FilePath = AppendVersion(dependency.FilePath, http);
                 }
@@ -287,7 +287,7 @@ namespace ClientDependency.Core.FileRegistration.Providers
         {
             if (ClientDependencySettings.Instance.Version == 0)
                 return url;
-            if ((http.IsDebuggingEnabled || !EnableCompositeFiles)
+            if (!EnableCompositeFiles
                 || ClientDependencySettings.Instance.DefaultCompositeFileProcessingProvider.UrlType == CompositeUrlType.Base64QueryStrings)
             {
                 //don't append if it is already there!

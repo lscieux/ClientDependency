@@ -136,10 +136,15 @@ namespace ClientDependency.Core
         {
             string xml;
 
-            using (var client = new WebClient())
+            using (var client = new CookieAwareWebClient())
             {
                 client.Credentials = CredentialCache.DefaultNetworkCredentials;
                 client.Encoding = Encoding.UTF8;
+                if (HttpContext.Current != null)
+                {
+                    client.AddHttpCookieCollection(HttpContext.Current.Request.Url.Host, HttpContext.Current.Request.Cookies);    
+                }
+
                 xml = client.DownloadString(resource);
             }
 
@@ -151,5 +156,77 @@ namespace ClientDependency.Core
             return xml;
         }
 
+        /// <summary>
+        /// The cookie aware web client.
+        /// </summary>
+        public class CookieAwareWebClient : WebClient
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CookieAwareWebClient"/> class.
+            /// </summary>
+            public CookieAwareWebClient()
+            {
+                CookieContainer = new CookieContainer();
+            }
+
+            /// <summary>
+            /// Gets the cookie container.
+            /// </summary>
+            public CookieContainer CookieContainer { get; private set; }
+
+            /// <summary>
+            /// The add http cookie collection.
+            /// </summary>
+            /// <param name="domain">
+            /// The domain.
+            /// </param>
+            /// <param name="httpCookieCollection">
+            /// The http cookie collection.
+            /// </param>
+            public void AddHttpCookieCollection(string domain, HttpCookieCollection httpCookieCollection)
+            {
+                foreach (string httpCookieName in httpCookieCollection)
+                {
+                    var httpCookie = httpCookieCollection[httpCookieName];
+
+                    if (httpCookie != null)
+                    {
+                        // Convert between the System.Net.Cookie to a System.Web.HttpCookie
+                        var cookie = new Cookie
+                        {
+                            Domain = domain,
+                            Expires = httpCookie.Expires,
+                            Name = httpCookie.Name,
+                            Path = httpCookie.Path,
+                            Secure = httpCookie.Secure,
+                            Value = httpCookie.Value
+                        };
+
+                        CookieContainer.Add(cookie);
+                    }
+                }
+            }
+
+            /// <summary>
+            /// The get web request.
+            /// </summary>
+            /// <param name="address">
+            /// The address.
+            /// </param>
+            /// <returns>
+            /// The <see cref="WebRequest"/>.
+            /// </returns>
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                var request = base.GetWebRequest(address) as HttpWebRequest;
+                if (request != null)
+                {
+                    request.CookieContainer = CookieContainer;
+                    return request;
+                }
+
+                return base.GetWebRequest(address);
+            }
+        }
     }
 }

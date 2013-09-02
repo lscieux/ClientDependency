@@ -29,30 +29,21 @@ namespace ClientDependency.Core.Module
         {
             HttpRequestBase request = Context.Request;
             HttpResponseBase response = Context.Response;
-
-            //if debug is on, then don't compress
-            if (!Context.IsDebuggingEnabled)
+            
+            //check if this request should be compressed based on the mime type and path
+            var m = GetSupportedPath(); 
+            if (IsSupportedMimeType() && m != null)
             {
-                //check if this request should be compressed based on the mime type and path
-                var m = GetSupportedPath(); 
-                if (IsSupportedMimeType() && m != null)
+                var cType = Context.GetClientCompression();
+                Context.AddCompressionResponseHeader(cType);
+                
+                if (cType == CompressionType.deflate)
                 {
-                    var cType = Context.GetClientCompression();
-                    Context.AddCompressionResponseHeader(cType);
-
-                    
-
-                    if (cType == CompressionType.deflate)
-                    {
-                        response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
-                    }
-                    else if (cType == CompressionType.gzip)
-                    {
-                        response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
-                    }
-
-                    
-
+                    response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+                }
+                else if (cType == CompressionType.gzip)
+                {
+                    response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
                 }
             }
         }
