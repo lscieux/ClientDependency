@@ -189,11 +189,14 @@ namespace ClientDependency.Core.FileRegistration.Providers
                     stringExt = extension.ToUpper().Split(new[] {'?'}, StringSplitOptions.RemoveEmptyEntries)[0];
                 }
 
+                var applicationPath = http.Request.ApplicationPath ?? string.Empty;
+                var isWebResource = f.FilePath.StartsWith(applicationPath.TrimEnd('/') + "/webresource.axd", StringComparison.InvariantCultureIgnoreCase);
+
                 // if it is an external resource OR
                 // if it is a non-standard JS/CSS resource (i.e. a server request)
                 // then we need to break the sequence
                 // unless it has been explicitely required that the dependency be bundled
-                if (!http.IsAbsolutePath(f.FilePath) && !fileBasedExtensions.Contains(stringExt)
+                if ((!http.IsAbsolutePath(f.FilePath) && !fileBasedExtensions.Contains(stringExt) && !isWebResource)
                     //now check for external resources
                     || (http.IsAbsolutePath(f.FilePath)
                         //remote dependencies aren't local
