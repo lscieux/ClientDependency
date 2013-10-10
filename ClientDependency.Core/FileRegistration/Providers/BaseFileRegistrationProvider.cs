@@ -288,11 +288,12 @@ namespace ClientDependency.Core.FileRegistration.Providers
             foreach (var d in dependencies)
             {
                 //check if it is a duplicate
-                if (dependencies.Count(x => x.FilePath.ToUpper().Trim().Equals(d.FilePath.ToUpper().Trim())) > 1)
+                if (dependencies.Count(x => string.Compare(x.FilePath.Trim(), d.FilePath.Trim(), StringComparison.OrdinalIgnoreCase) == 0) > 1)
                 {
                     //find the dups and return an object with the associated index
+                    var d1 = d;
                     var dups = dependencies
-                        .Where(x => x.FilePath.ToUpper().Trim().Equals(d.FilePath.ToUpper().Trim()))
+                        .Where(x => string.Compare(x.FilePath.Trim(), d1.FilePath.Trim(), StringComparison.OrdinalIgnoreCase) == 0)
                         .Select((x, index) => new { Index = index, File = x })
                         .ToList();
 

@@ -14,14 +14,23 @@ namespace ClientDependency.Core.Controls
     /// </summary>
 	[ParseChildren(typeof(ClientDependencyPath), ChildrenAsProperties = true)]
 	public class ClientDependencyLoader : Control
-	{
-        
+    {
+
+        /// <summary>
+        /// Property use to enable or disable attributes parsing
+        /// See ClientDependencyAttribute class for more information
+        /// For performance reason it is better to disable it if not used
+        /// </summary>
+        public bool EnableClientDependencyAttribute { get; set; }
+
 		/// <summary>
 		/// Constructor sets the defaults.
 		/// </summary>
 		public ClientDependencyLoader()
 		{
-			Paths = new ClientDependencyPathCollection();
+		    Paths = new ClientDependencyPathCollection();
+
+            EnableClientDependencyAttribute = false;
 
 		    _base = new BaseLoader(new HttpContextWrapper(Context))
 		                 {
@@ -320,7 +329,7 @@ namespace ClientDependency.Core.Controls
 
 		public void RegisterClientDependencies(WebFormsFileRegistrationProvider provider, Control control, IEnumerable<IClientDependencyPath> paths)
 		{
-            var dependencies = FindDependencies(control);
+		    var dependencies = FindDependencies(control, this.EnableClientDependencyAttribute);
             _base.RegisterClientDependencies(provider, dependencies, paths, ClientDependencySettings.Instance.FileRegistrationProviderCollection);
 		}
 
@@ -329,7 +338,7 @@ namespace ClientDependency.Core.Controls
 		/// </summary>
 		/// <param name="control"></param>
 		/// <returns></returns>
-        private static IEnumerable<IClientDependencyFile> FindDependencies(Control control)
+        private static IEnumerable<IClientDependencyFile> FindDependencies(Control control, bool enableClientDependencyAttribute)
 		{
             var ctls = new List<Control>(control.FlattenChildren()) { control };
 
@@ -342,10 +351,13 @@ namespace ClientDependency.Core.Controls
                 // find dependencies
                 var controlType = ctl.GetType();
 
-			    dependencies.AddRange(Attribute.GetCustomAttributes(controlType)
+                if (enableClientDependencyAttribute)
+                {
+                    dependencies.AddRange(Attribute.GetCustomAttributes(controlType)
                     .OfType<ClientDependencyAttribute>()
-                    .Cast<IClientDependencyFile>());
-
+                    .Cast<IClientDependencyFile>());    
+                }
+			    
 			    if (iClientDependency.IsAssignableFrom(ctl.GetType()))
                 {
                     var include = (IClientDependencyFile)ctl;
