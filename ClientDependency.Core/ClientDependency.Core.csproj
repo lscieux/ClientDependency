@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -130,6 +132,7 @@
     <Compile Include="IHttpProvider.cs" />
     <Compile Include="IRequiresHtmlAttributesParsing.cs" />
     <Compile Include="JavascriptFile.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\TraceLogger.cs" />
     <Compile Include="Module\ClientDependencyModule.cs" />
     <Compile Include="Config\CompositeFileSection.cs" />

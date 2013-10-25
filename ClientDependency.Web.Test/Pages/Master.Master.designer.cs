@@ -40,22 +40,22 @@ namespace ClientDependency.Web.Test.Pages {
         protected global::ClientDependency.Core.Controls.ClientDependencyLoader Loader;
         
         /// <summary>
-        /// CssInclude1 control.
+        /// SiteCss control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::ClientDependency.Core.Controls.CssInclude CssInclude1;
+        protected global::ClientDependency.Core.Controls.CssInclude SiteCss;
         
         /// <summary>
-        /// CssInclude2 control.
+        /// ColorSchemeCss control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::ClientDependency.Core.Controls.CssInclude CssInclude2;
+        protected global::ClientDependency.Core.Controls.CssInclude ColorSchemeCss;
         
         /// <summary>
         /// Header1 control.

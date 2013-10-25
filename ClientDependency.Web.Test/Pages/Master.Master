@@ -26,8 +26,8 @@
 		</Paths>
 	</CD:ClientDependencyLoader>
 	
-	<CD:CssInclude ID="CssInclude1" runat="server" FilePath="Site.css" PathNameAlias="Styles" />
-	<CD:CssInclude ID="CssInclude2" runat="server" FilePath="ColorScheme.css" PathNameAlias="Styles" />
+	<CD:CssInclude ID="SiteCss" runat="server" FilePath="Site.css" PathNameAlias="Styles" />
+	<CD:CssInclude ID="ColorSchemeCss" runat="server" FilePath="ColorScheme.css" PathNameAlias="Styles" />
 
     
     

@@ -68,6 +68,15 @@ namespace ClientDependency.Core.Config
             }
         }
 
+        [ConfigurationProperty("loggerTarget")]
+        public string LoggerTarget
+        {
+            get
+            {
+                return (string)this["loggerTarget"];
+            }
+        }
+
         private ProviderSettingsCollection _filters;
         /// <summary>
         /// Not really supposed to be used by public, but can implement at your own risk!

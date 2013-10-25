@@ -4,7 +4,7 @@
 <%--<CD:JsInclude ID="JsInclude1" runat="server" FilePath="~/Js/jquery-1.3.2.min.js" />--%>
 
 <%--Demonstrates the use of using the PathNameAlias--%>
-<CD:CssInclude ID="CssInclude1" runat="server" FilePath="Controls.css" PathNameAlias="Styles" />
+<CD:CssInclude ID="ControlsCss" runat="server" FilePath="Controls.css" PathNameAlias="Styles" />
 
 <div class="control white bg-complement-2">
     <a href="<%= ResolveClientUrl("~/") %>" class="f-primary-4 bg-complement-2">Return to landing page</a>

@@ -40,6 +40,8 @@ namespace ClientDependency.Core
             out string requestContents,
             out Uri resultUri)
         {
+            ClientDependencySettings.Instance.Logger.Debug(string.Format("Trying to read from URI : {0}", url));
+
             Uri uri;
             if (Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out uri))
             {
@@ -108,6 +110,7 @@ namespace ClientDependency.Core
 
                     if (bundleExternalUri)
                     {
+                        ClientDependencySettings.Instance.Logger.Debug(string.Format("Calling GetXmlResponse with URI : {0}", uri.AbsoluteUri));
                         requestContents = GetXmlResponse(uri);
                         resultUri = uri;
                         return true;

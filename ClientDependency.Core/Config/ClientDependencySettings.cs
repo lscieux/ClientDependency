@@ -315,8 +315,12 @@ namespace ClientDependency.Core.Config
                 }
 
                 Logger = (ILogger)Activator.CreateInstance(t);
+                var fileLogger = this.Logger as FileLogger;
+                if ((fileLogger != null) && !string.IsNullOrEmpty(this.ConfigSection.LoggerTarget))
+                {
+                    fileLogger.Init(this.ConfigSection.LoggerTarget);
+                }
             }
-
         }
 
         private void LoadDefaultFileRegConfig(ClientDependencySection section)

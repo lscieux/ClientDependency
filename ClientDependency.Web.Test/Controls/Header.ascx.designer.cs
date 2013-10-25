@@ -13,12 +13,12 @@ namespace ClientDependency.Web.Test.Controls {
     public partial class Header {
         
         /// <summary>
-        /// CssInclude1 control.
+        /// ControlsCss control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::ClientDependency.Core.Controls.CssInclude CssInclude1;
+        protected global::ClientDependency.Core.Controls.CssInclude ControlsCss;
     }
 }

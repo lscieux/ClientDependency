@@ -333,43 +333,51 @@ namespace ClientDependency.Core.Controls
             _base.RegisterClientDependencies(provider, dependencies, paths, ClientDependencySettings.Instance.FileRegistrationProviderCollection);
 		}
 
-		/// <summary>
-		/// Find all dependencies of this control and it's entire child control heirarchy.
-		/// </summary>
-		/// <param name="control"></param>
-		/// <returns></returns>
-        private static IEnumerable<IClientDependencyFile> FindDependencies(Control control, bool enableClientDependencyAttribute)
-		{
+        /// <summary>
+        /// Find all dependencies of this control and it's entire child control heirarchy.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="enableClientDependencyAttribute"></param>
+        /// <returns></returns>
+        private static IEnumerable<IClientDependencyFile> FindDependencies(
+            Control control, bool enableClientDependencyAttribute)
+        {
             var ctls = new List<Control>(control.FlattenChildren()) { control };
 
-		    var dependencies = new List<IClientDependencyFile>();
-			
+            var dependencies = new List<IClientDependencyFile>();
+
+            // Hashset used to not insert duplicate control with same server ID into the dependencies list result
+            // If the server ID has been correctly filled, this will handle the case where a same dependencies is added though two differents paths
+            var dependenciesIds = new HashSet<string>();
+
             // add child dependencies
-			var iClientDependency = typeof(IClientDependencyFile);
+            var iClientDependency = typeof(IClientDependencyFile);
             foreach (var ctl in ctls)
-			{
-                // find dependencies
-                var controlType = ctl.GetType();
-
-                if (enableClientDependencyAttribute)
+            {
+                if (string.IsNullOrEmpty(ctl.ID) || !dependenciesIds.Contains(ctl.ID))
                 {
-                    dependencies.AddRange(Attribute.GetCustomAttributes(controlType)
-                    .OfType<ClientDependencyAttribute>()
-                    .Cast<IClientDependencyFile>());    
-                }
-			    
-			    if (iClientDependency.IsAssignableFrom(ctl.GetType()))
-                {
-                    var include = (IClientDependencyFile)ctl;
-                    dependencies.Add(include);
-                }
-                
-			}
+                    // find dependencies
+                    var controlType = ctl.GetType();
 
-			return dependencies;
-		}		
+                    if (enableClientDependencyAttribute)
+                    {
+                        dependencies.AddRange(
+                            Attribute.GetCustomAttributes(controlType).OfType<ClientDependencyAttribute>());
+                    }
 
-	}
+                    if (iClientDependency.IsInstanceOfType(ctl))
+                    {
+                        var include = (IClientDependencyFile)ctl;
+                        dependencies.Add(include);
+                        dependenciesIds.Add(ctl.ID);
+                    }
+                }
+            }
+
+            return dependencies;
+        }
+
+    }
 
 	
 
