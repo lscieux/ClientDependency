@@ -15,13 +15,17 @@ namespace ClientDependency.Core.Controls
 	[ParseChildren(typeof(ClientDependencyPath), ChildrenAsProperties = true)]
 	public class ClientDependencyLoader : Control
     {
-
         /// <summary>
         /// Property use to enable or disable attributes parsing
         /// See ClientDependencyAttribute class for more information
         /// For performance reason it is better to disable it if not used
         /// </summary>
         public bool EnableClientDependencyAttribute { get; set; }
+        
+        /// <summary>
+        /// Property use to accept or refuse duplicated ID from the control describing an IClientDependencyFile
+        /// </summary>
+        public bool AcceptDuplicateId { get; set; }
 
 		/// <summary>
 		/// Constructor sets the defaults.
@@ -31,6 +35,8 @@ namespace ClientDependency.Core.Controls
 		    Paths = new ClientDependencyPathCollection();
 
             EnableClientDependencyAttribute = false;
+
+		    AcceptDuplicateId = true;
 
 		    _base = new BaseLoader(new HttpContextWrapper(Context))
 		                 {
@@ -329,7 +335,7 @@ namespace ClientDependency.Core.Controls
 
 		public void RegisterClientDependencies(WebFormsFileRegistrationProvider provider, Control control, IEnumerable<IClientDependencyPath> paths)
 		{
-		    var dependencies = FindDependencies(control, this.EnableClientDependencyAttribute);
+		    var dependencies = this.FindDependencies(control);
             _base.RegisterClientDependencies(provider, dependencies, paths, ClientDependencySettings.Instance.FileRegistrationProviderCollection);
 		}
 
@@ -339,8 +345,7 @@ namespace ClientDependency.Core.Controls
         /// <param name="control"></param>
         /// <param name="enableClientDependencyAttribute"></param>
         /// <returns></returns>
-        private static IEnumerable<IClientDependencyFile> FindDependencies(
-            Control control, bool enableClientDependencyAttribute)
+        private IEnumerable<IClientDependencyFile> FindDependencies(Control control)
         {
             var ctls = new List<Control>(control.FlattenChildren()) { control };
 
@@ -354,12 +359,12 @@ namespace ClientDependency.Core.Controls
             var iClientDependency = typeof(IClientDependencyFile);
             foreach (var ctl in ctls)
             {
-                if (string.IsNullOrEmpty(ctl.ID) || !dependenciesIds.Contains(ctl.ID))
+                if (this.AcceptDuplicateId || string.IsNullOrEmpty(ctl.ID) || !dependenciesIds.Contains(ctl.ID))
                 {
                     // find dependencies
                     var controlType = ctl.GetType();
 
-                    if (enableClientDependencyAttribute)
+                    if (this.EnableClientDependencyAttribute)
                     {
                         dependencies.AddRange(
                             Attribute.GetCustomAttributes(controlType).OfType<ClientDependencyAttribute>());
