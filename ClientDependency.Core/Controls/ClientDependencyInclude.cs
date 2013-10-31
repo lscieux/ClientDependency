@@ -9,6 +9,7 @@ namespace ClientDependency.Core.Controls
 	{
         protected ClientDependencyInclude()
 		{
+            DependencyId = string.Empty;
             Priority = Constants.DefaultPriority;
             Group = Constants.DefaultGroup;
 			PathNameAlias = "";
@@ -17,6 +18,7 @@ namespace ClientDependency.Core.Controls
 
         protected ClientDependencyInclude(IClientDependencyFile file)
 		{
+            DependencyId = string.Empty;
 			Priority = file.Priority;
 			PathNameAlias = file.PathNameAlias;
 			FilePath = file.FilePath;
@@ -27,6 +29,7 @@ namespace ClientDependency.Core.Controls
         
 		public ClientDependencyType DependencyType { get; internal set; }
 
+        public string DependencyId { get; set; }
 		public string FilePath { get; set; }
         public string PathNameAlias { get; set; }
         public int Priority { get; set; }

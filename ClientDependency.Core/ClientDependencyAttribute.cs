@@ -64,6 +64,7 @@ namespace ClientDependency.Core
             if (String.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
 
+            DependencyId = string.Empty;
             Priority = priority;
 
             Group = group;
@@ -77,6 +78,10 @@ namespace ClientDependency.Core
             HtmlAttributes = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// Gets or sets the dependency id.
+        /// </summary>
+        public string DependencyId { get; set; }
 
         /// <summary>
         /// Gets or sets the priority.

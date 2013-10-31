@@ -359,22 +359,22 @@ namespace ClientDependency.Core.Controls
             var iClientDependency = typeof(IClientDependencyFile);
             foreach (var ctl in ctls)
             {
-                if (this.AcceptDuplicateId || string.IsNullOrEmpty(ctl.ID) || !dependenciesIds.Contains(ctl.ID))
+                // find dependencies
+                var controlType = ctl.GetType();
+
+                if (this.EnableClientDependencyAttribute)
                 {
-                    // find dependencies
-                    var controlType = ctl.GetType();
+                    dependencies.AddRange(
+                        Attribute.GetCustomAttributes(controlType).OfType<ClientDependencyAttribute>());
+                }
 
-                    if (this.EnableClientDependencyAttribute)
+                if (iClientDependency.IsInstanceOfType(ctl))
+                {
+                    var include = (IClientDependencyFile)ctl;
+                    if (this.AcceptDuplicateId || string.IsNullOrEmpty(include.DependencyId) || !dependenciesIds.Contains(include.DependencyId))
                     {
-                        dependencies.AddRange(
-                            Attribute.GetCustomAttributes(controlType).OfType<ClientDependencyAttribute>());
-                    }
-
-                    if (iClientDependency.IsInstanceOfType(ctl))
-                    {
-                        var include = (IClientDependencyFile)ctl;
                         dependencies.Add(include);
-                        dependenciesIds.Add(ctl.ID);
+                        dependenciesIds.Add(include.DependencyId);    
                     }
                 }
             }

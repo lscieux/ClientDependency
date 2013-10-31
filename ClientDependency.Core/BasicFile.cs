@@ -14,6 +14,7 @@ namespace ClientDependency.Core
 	{
 		public BasicFile(ClientDependencyType type)
 		{
+            DependencyId = string.Empty;
 			DependencyType = type;
 		    HtmlAttributes = new Dictionary<string, string>();
 		    Priority = Constants.DefaultPriority;
@@ -22,6 +23,7 @@ namespace ClientDependency.Core
 
 		#region IClientDependencyFile Members
 
+        public string DependencyId { get; set; }
 		public string FilePath { get; set; }
 		public ClientDependencyType DependencyType { get; private set; }
 		public int Priority { get; set; }
