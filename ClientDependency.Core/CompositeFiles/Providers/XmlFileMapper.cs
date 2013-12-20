@@ -190,6 +190,7 @@ namespace ClientDependency.Core.CompositeFiles.Providers
             if (x == null)
             {
                 //now, create a map with the file key so that it can be filled out later with the actual composite file that is created by the handler
+                ClientDependencySettings.Instance.Logger.Debug(string.Format("CreateNewMap : {0} {1}", fileKey, http.Request.Url));
                 CreateUpdateMap(fileKey,
                     string.Empty,
                     dependentFiles,

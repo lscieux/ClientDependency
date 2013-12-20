@@ -36,7 +36,7 @@ namespace ClientDependency.Core
         {
             CompressionType type = CompressionType.none;
 
-            if (context.Request.UserAgent.Contains("MSIE 6"))
+            if (context.Request.UserAgent != null && context.Request.UserAgent.Contains("MSIE 6"))
             {
                 return type;
             }

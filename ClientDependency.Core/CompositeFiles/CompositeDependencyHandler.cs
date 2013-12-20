@@ -41,6 +41,8 @@ namespace ClientDependency.Core.CompositeFiles
             string fileKey;
             int version = 0;
 
+            ClientDependencySettings.Instance.Logger.Debug("--- ProcessRequest : BEGIN ---");
+
             if (string.IsNullOrEmpty(context.Request.PathInfo))
             {
                 // querystring format
@@ -58,7 +60,7 @@ namespace ClientDependency.Core.CompositeFiles
             }
             else
             {
-
+                ClientDependencySettings.Instance.Logger.Debug(string.Format("--- ProcessRequest : PathInfo : {0}", context.Request.PathInfo));
                 //get path to parse
                 var path = context.Request.PathInfo.TrimStart('/');
                 var pathFormat = ClientDependencySettings.Instance.DefaultCompositeFileProcessingProvider.PathBasedUrlFormat;
@@ -70,6 +72,7 @@ namespace ClientDependency.Core.CompositeFiles
             }
 
             fileKey = context.Server.UrlDecode(fileKey);
+            ClientDependencySettings.Instance.Logger.Debug(string.Format("--- ProcessRequest : fileKey : {0}", fileKey));
 
             if (string.IsNullOrEmpty(fileKey))
                 throw new ArgumentException("Must specify a fileset in the request");
@@ -96,10 +99,14 @@ namespace ClientDependency.Core.CompositeFiles
 
             context.Response.ContentType = type == ClientDependencyType.Javascript ? "application/x-javascript" : "text/css";
             context.Response.OutputStream.Write(outputBytes, 0, outputBytes.Length);
+
+            ClientDependencySettings.Instance.Logger.Debug("--- ProcessRequest : END ---");
         }
 
         internal byte[] ProcessRequestInternal(HttpContextBase context, string fileset, ClientDependencyType type, int version, byte[] outputBytes)
         {
+            ClientDependencySettings.Instance.Logger.Debug("--- ProcessRequestInternal : BEGIN ---");
+
             //get the compression type supported
             var clientCompression = context.GetClientCompression();
 
@@ -177,7 +184,12 @@ namespace ClientDependency.Core.CompositeFiles
                 }
             }
 
-            SetCaching(context, compositeFileName, fileset, clientCompression);
+            if (ClientDependencySettings.Instance.ConfigSection.EnableOutputCaching)
+            {
+                SetCaching(context, compositeFileName, fileset, clientCompression);    
+            }
+            
+            ClientDependencySettings.Instance.Logger.Debug("--- ProcessRequestInternal : END ---");
             return outputBytes;
         }
 
@@ -206,7 +218,8 @@ namespace ClientDependency.Core.CompositeFiles
         /// <param name="fileset">The Base64 encoded string supplied in the query string for the handler</param>
         /// <param name="compressionType"></param>
         private void SetCaching(HttpContextBase context, string fileName, string fileset, CompressionType compressionType)
-        {            
+        {
+            ClientDependencySettings.Instance.Logger.Debug(string.Format("SetCaching : fileName : {0} ---", fileName));
             //This ensures OutputCaching is set for this handler and also controls
             //client side caching on the browser side. Default is 10 days.
             var duration = TimeSpan.FromDays(10);

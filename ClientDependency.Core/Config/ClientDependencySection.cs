@@ -77,6 +77,24 @@ namespace ClientDependency.Core.Config
             }
         }
 
+        [ConfigurationProperty("allowRemoteResources", DefaultValue = "true")]
+        public bool AllowRemoteResources
+        {
+            get
+            {
+                return (bool)this["allowRemoteResources"];
+            }
+        }
+
+        [ConfigurationProperty("enableOutputCaching", DefaultValue = "true")]
+        public bool EnableOutputCaching
+        {
+            get
+            {
+                return (bool)this["enableOutputCaching"];
+            }
+        }
+
         private ProviderSettingsCollection _filters;
         /// <summary>
         /// Not really supposed to be used by public, but can implement at your own risk!

@@ -161,7 +161,8 @@ namespace ClientDependency.Core.CompositeFiles.Providers
         /// <param name="type"></param>
         /// <param name="http"></param>
         protected virtual CompositeFileDefinition WriteFileToStream(StreamWriter sw, string url, ClientDependencyType type, HttpContextBase http)
-        {   
+        {
+            ClientDependencySettings.Instance.Logger.Debug(string.Format("WriteFileToStream : url : {0} ---", url));
             string requestOutput;
             Uri resultUri;
             var rVal = RequestHelper.TryReadUri(url, http, BundleDomains, out requestOutput, out resultUri);

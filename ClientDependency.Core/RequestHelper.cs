@@ -84,6 +84,30 @@ namespace ClientDependency.Core
                 {
                     //we've gotten this far, make the URI absolute and try to load it
                     uri = uri.MakeAbsoluteUri(http);
+                    UriBuilder uriBuilder;
+                    if (ClientDependencySettings.Instance.ConfigSection.AllowRemoteResources)
+                    {
+                        //MakeAbsoluteUri does not return the correct port so retrieve it form the request headers and rebuild the Uri
+                        int port;
+                        try
+                        {
+                            var split = http.Request.Headers["Host"].Split(':');
+                            port = split.Count() > 1 ? int.Parse(split[1]) : 80;
+                        }
+                        catch
+                        {
+                            // Something went wrong when parsing the request headers, keep the port returned by MakeAbsoluteUri
+                            port = uri.Port;
+                        }
+
+                        uriBuilder = new UriBuilder(uri) { Port = port };
+                    }
+                    else
+                    {
+                        uriBuilder = new UriBuilder(uri) { Host = "localhost" };
+                    }
+
+                    uri = uriBuilder.Uri;
 
                     //if this isn't a web resource, we need to check if its approved
                     if (!bundleExternalUri)
@@ -158,7 +182,7 @@ namespace ClientDependency.Core
 
             return xml;
         }
-
+        
         /// <summary>
         /// The cookie aware web client.
         /// </summary>
