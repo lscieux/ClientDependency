@@ -129,8 +129,9 @@ namespace ClientDependency.Core.CompositeFiles.Providers
             if (string.IsNullOrEmpty(fileKey)) throw new ArgumentNullException("fileKey");
 
             var x = FindItem(fileKey, version);
+
             try
-            {                
+            {
                 if (x != null)
                 {
                     var file = new CompositeFileMap(fileKey,
@@ -254,6 +255,7 @@ namespace ClientDependency.Core.CompositeFiles.Providers
                         new XAttribute("file", compositeFile),
                         new XAttribute("compression", compressionType),
                         new XAttribute("version", version),
+                        new XAttribute("path", HttpContext.Current.Request.Url),
                         CreateFileNode(dependentFiles)));
                 }
 

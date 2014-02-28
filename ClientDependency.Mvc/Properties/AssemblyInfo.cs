@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -20,3 +20,4 @@ using System.Security;
 [assembly: Guid("edff80c4-ff38-4468-9f25-088e4c54ebbb")]
 
 [assembly: AllowPartiallyTrustedCallers]
+[assembly: CLSCompliant(true)]

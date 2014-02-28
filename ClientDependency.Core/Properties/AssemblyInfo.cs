@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -34,3 +35,4 @@ using System.Security;
 [assembly: InternalsVisibleTo("ClientDependency.TypeScript")]
 
 [assembly: SecurityRules(SecurityRuleSet.Level1)]
+[assembly: CLSCompliant(true)]
