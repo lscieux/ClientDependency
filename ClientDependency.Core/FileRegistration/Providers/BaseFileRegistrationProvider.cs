@@ -430,7 +430,9 @@ namespace ClientDependency.Core.FileRegistration.Providers
             {
                 var folderPaths = paths;
                 UpdateFilePaths(allDependencies, folderPaths, http);
-                EnsureNoDuplicates(allDependencies, folderPaths);
+                
+                // For performances reason remove the duplicate checking
+                //EnsureNoDuplicates(allDependencies, folderPaths);
 
                 //now we regenerate the hash since dependencies have been removed/etc.. 
                 // and update the context items so it's not run again

@@ -36,7 +36,7 @@ namespace ClientDependency.Core.Controls
 
             EnableClientDependencyAttribute = false;
 
-		    AcceptDuplicateId = true;
+		    AcceptDuplicateId = false;
 
 		    _base = new BaseLoader(new HttpContextWrapper(Context))
 		                 {
